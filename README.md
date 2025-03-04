@@ -1,16 +1,36 @@
-# laundrodeck
+# 🧼 Laundrodeck - Laundry Service App
 
-LAUNDERODECK the fastest new system of laundry with technology for both the busy GEN ZER’S AND MILLENNIALS LIVING IN NIGERIA AND IN AFRICA AT LARGE.
+Laundrodeck is a **Flutter-powered** mobile application that connects users to laundry services. It allows users to **place orders, track laundry status, and make payments**, while admins can manage orders.
 
-## Getting Started
+## 🚀 Features
+✅ **User Authentication** (Sign Up, Login, Logout)  
+✅ **Admin & User Roles** (Different dashboards)  
+✅ **Order Placement & Tracking**  
+✅ **Payment (Bank Transfer & Paystack - Coming Soon)**  
+✅ **Custom Splash Screen**  
+✅ **Secure Database with Supabase**  
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 📱 Screenshots
+<!-- Uncomment & Replace with actual screenshots when available -->
+<!-- ![Splash Screen](screenshots/splash_screen.png) -->
+<!-- ![Home Screen](screenshots/home_screen.png) -->
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠 Tech Stack
+- **Flutter** (Frontend)
+- **Supabase** (Backend & Database)
+- **Dart** (Programming Language)
+- **Firebase Remote Config** (For dynamic settings)
+- **Paystack API** (For payments - Coming Soon)
+
+---
+
+## 🔧 Installation & Setup
+
+### **1️⃣ Clone the Repository**
+```sh
+git clone https://github.com/taotechs/Laundrodeck.git
+cd Laundrodeck
