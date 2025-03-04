@@ -41,26 +41,119 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Create Account", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.green)),
-              SizedBox(height: 20),
-              TextField(controller: nameController, decoration: InputDecoration(labelText: "Full Name")),
-              TextField(controller: phoneController, decoration: InputDecoration(labelText: "Phone Number"), keyboardType: TextInputType.phone),
-              TextField(controller: emailController, decoration: InputDecoration(labelText: "Email")),
-              TextField(controller: passwordController, decoration: InputDecoration(labelText: "Password"), obscureText: true),
-              SizedBox(height: 20),
-              ElevatedButton(onPressed: signUp, child: Text("Sign Up")),
-            ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.green.shade50],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.local_laundry_service, size: 100, color: Colors.green),
+                  SizedBox(height: 20),
+                  Text(
+                    "Create Account",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade800,
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                              labelText: "Full Name",
+                              prefixIcon: Icon(Icons.person, color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          TextField(
+                            controller: phoneController,
+                            decoration: InputDecoration(
+                              labelText: "Phone Number",
+                              prefixIcon: Icon(Icons.phone, color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            keyboardType: TextInputType.phone,
+                          ),
+                          SizedBox(height: 20),
+                          TextField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              prefixIcon: Icon(Icons.email, color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          TextField(
+                            controller: passwordController,
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              prefixIcon: Icon(Icons.lock, color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            obscureText: true,
+                          ),
+                          SizedBox(height: 30),
+                          ElevatedButton(
+                            onPressed: signUp,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context), // Navigate back to login
+                    child: Text(
+                      "Already have an account? Login",
+                      style: TextStyle(color: Colors.green.shade800),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

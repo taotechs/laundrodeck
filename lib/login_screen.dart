@@ -29,23 +29,93 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Laundrodeck", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.green)),
-              SizedBox(height: 20),
-              TextField(controller: emailController, decoration: InputDecoration(labelText: "Email")),
-              TextField(controller: passwordController, decoration: InputDecoration(labelText: "Password"), obscureText: true),
-              SizedBox(height: 20),
-              ElevatedButton(onPressed: login, child: Text("Login")),
-              TextButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen())),
-                child: Text("Don't have an account? Sign Up"),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.green.shade50],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.local_laundry_service, size: 100, color: Colors.green),
+                  SizedBox(height: 20),
+                  Text(
+                    "Laundrodeck",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade800,
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              prefixIcon: Icon(Icons.email, color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          TextField(
+                            controller: passwordController,
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              prefixIcon: Icon(Icons.lock, color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            obscureText: true,
+                          ),
+                          SizedBox(height: 30),
+                          ElevatedButton(
+                            onPressed: login,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen())),
+                    child: Text(
+                      "Don't have an account? Sign Up",
+                      style: TextStyle(color: Colors.green.shade800),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
