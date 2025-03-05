@@ -22,15 +22,15 @@ class LaundrodeckApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: laundrodeckTheme,
+      theme: laundrodeckTheme, // Custom theme
       debugShowCheckedModeBanner: false,
       initialRoute: '/', // Start with SplashScreen
       routes: {
         '/': (context) => SplashScreen(), // ✅ Splash Screen as first route
-        '/home': (context) => HomeScreen(),
-        '/admin': (context) => AdminDashboard(),
-        '/login': (context) => LoginScreen(),
-        '/onboarding': (context) => OnboardingScreen(),
+        '/home': (context) => HomeScreen(), // Home screen for regular users
+        '/admin': (context) => AdminDashboard(), // Admin dashboard for admins
+        '/login': (context) => LoginScreen(), // Login screen
+        '/onboarding': (context) => OnboardingScreen(), // Onboarding screen
       },
     );
   }

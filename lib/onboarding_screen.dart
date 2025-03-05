@@ -14,75 +14,115 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              controller: _controller,
-              onPageChanged: (index) {
-                setState(() {
-                  isLastPage = index == 2; // Last page index
-                });
-              },
-              children: [
-                OnboardingPage(
-                  image: "assets/laundry1.png",
-                  title: "Fast & Reliable Laundry Service",
-                  description: "Get your clothes washed and delivered quickly.",
-                ),
-                OnboardingPage(
-                  image: "assets/laundry2.png",
-                  title: "Track Your Orders",
-                  description: "Monitor your laundry progress in real-time.",
-                ),
-                OnboardingPage(
-                  image: "assets/laundry3.png",
-                  title: "Secure Payments",
-                  description: "Make hassle-free payments using Paystack.",
-                ),
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.green.shade50],
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                SmoothPageIndicator(
-                  controller: _controller,
-                  count: 3,
-                  effect: WormEffect(activeDotColor: Colors.green),
-                ),
-                SizedBox(height: 20),
-                isLastPage
-                    ? ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
-                  child: Text("Get Started"),
-                )
-                    : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () => _controller.jumpToPage(2),
-                      child: Text("Skip"),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                onPageChanged: (index) {
+                  setState(() {
+                    isLastPage = index == 2; // Last page index
+                  });
+                },
+                children: [
+                  OnboardingPage(
+                    image: "assets/laundry1.png",
+                    title: "Fast & Reliable Laundry Service",
+                    description: "Get your clothes washed, ironed, and delivered on time with our professional service.",
+                  ),
+                  OnboardingPage(
+                    image: "assets/laundry2.png",
+                    title: "Track Your Orders",
+                    description: "Monitor your laundry progress in real-time and get notified at every stage.",
+                  ),
+                  OnboardingPage(
+                    image: "assets/laundry3.png",
+                    title: "Secure & Easy Payments",
+                    description: "Make hassle-free payments using cards, transfers, or mobile money.",
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: [
+                  SmoothPageIndicator(
+                    controller: _controller,
+                    count: 3,
+                    effect: WormEffect(
+                      activeDotColor: Colors.green,
+                      dotColor: Colors.grey.shade300,
+                      dotHeight: 10,
+                      dotWidth: 10,
                     ),
-                    ElevatedButton(
-                      onPressed: () => _controller.nextPage(
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
+                  ),
+                  SizedBox(height: 20),
+                  isLastPage
+                      ? ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text("Next"),
                     ),
-                  ],
-                ),
-              ],
+                    child: Text(
+                      "Get Started",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  )
+                      : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () => _controller.jumpToPage(2),
+                        child: Text(
+                          "Skip",
+                          style: TextStyle(
+                            color: Colors.green.shade800,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => _controller.nextPage(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Text(
+                          "Next",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -98,15 +138,34 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(image, height: 250), // Ensure images are in assets folder
+          Image.asset(
+            image,
+            height: 250, // Ensure images are in assets folder
+            fit: BoxFit.contain,
+          ),
+          SizedBox(height: 40),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.green.shade800,
+            ),
+            textAlign: TextAlign.center,
+          ),
           SizedBox(height: 20),
-          Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Text(description, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey.shade600,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

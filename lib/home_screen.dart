@@ -26,6 +26,28 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _logout(BuildContext context) async {
+    try {
+      // Ensure Supabase is initialized and auth is not null
+      if (Supabase.instance.client.auth.currentUser != null) {
+        await Supabase.instance.client.auth.signOut();
+      }
+
+      // Navigate to the login screen
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    } catch (e) {
+      // Handle any errors during logout
+      print("❌ Logout failed: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Logout failed. Please try again.")),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,8 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.green.shade800),
               ),
               onTap: () async {
-                await Supabase.instance.client.auth.signOut();
-                Navigator.pushReplacementNamed(context, '/login');
+                await _logout(context); // Call the logout function
               },
             ),
           ],

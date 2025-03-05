@@ -19,19 +19,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final user = Supabase.instance.client.auth.currentUser;
 
     if (user != null) {
-      final response = await Supabase.instance.client
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-          .catchError((_) => null);
-
-      bool isAdmin = response != null && response['role'] == 'admin';
-
-      // Navigate using named routes
-      Navigator.pushReplacementNamed(context, isAdmin ? '/admin' : '/home');
+      // If the user is logged in, navigate to the home screen
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
-      // Navigate to onboarding if user is not logged in
+      // If the user is not logged in, navigate to the onboarding screen
       Navigator.pushReplacementNamed(context, '/onboarding');
     }
   }
@@ -44,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/laundry2.png', height: 120), // Replace with your logo
+            Image.asset('assets/laundry1.png', height: 120), // Replace with your logo
             SizedBox(height: 20),
             CircularProgressIndicator(color: Colors.white), // Loading indicator
           ],

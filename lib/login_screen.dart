@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'signup_screen.dart';
 import 'home_screen.dart';
+import 'admin_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,15 +15,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> login() async {
     try {
+      // Sign in with email and password
       final response = await Supabase.instance.client.auth.signInWithPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+
       if (response.user != null) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        // Fetch the user's role from the database
+        final userResponse = await Supabase.instance.client
+            .from('users')
+            .select('role')
+            .eq('id', response.user!.id)
+            .single();
+
+        bool isAdmin = userResponse['role'] == 'admin';
+
+        // Navigate based on the user's role
+        if (isAdmin) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminDashboard()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Failed: $e")));
+      // Handle login errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Failed: $e")),
+      );
     }
   }
 

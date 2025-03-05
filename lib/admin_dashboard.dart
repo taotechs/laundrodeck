@@ -19,19 +19,30 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   Future<void> fetchOrders() async {
     try {
-      final response = await Supabase.instance.client.from('orders').select();
+      // Fetch orders and join with the users table to get user details
+      final response = await Supabase.instance.client
+          .from('orders')
+          .select('''
+            id, created_at, status, amount, user_id,
+            users:user_id (name, phone, email)
+          ''');
 
       print("✅ Orders Fetched: $response"); // Debugging
 
-      setState(() {
-        orders = List<Map<String, dynamic>>.from(response);
-        isLoading = false;
-      });
+      // Check if the widget is still mounted before calling setState
+      if (mounted) {
+        setState(() {
+          orders = List<Map<String, dynamic>>.from(response);
+          isLoading = false;
+        });
+      }
     } catch (e) {
       print("❌ Failed to fetch orders: $e"); // Debugging
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -42,15 +53,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
           .update({'status': newStatus})
           .eq('id', orderId);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("✅ Order Updated Successfully")),
-      );
+      // Check if the widget is still mounted before showing the SnackBar
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("✅ Order Updated Successfully")),
+        );
+      }
 
       fetchOrders(); // Refresh orders after update
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("❌ Failed to Update Order: $e")),
-      );
+      // Check if the widget is still mounted before showing the SnackBar
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("❌ Failed to Update Order: $e")),
+        );
+      }
     }
   }
 
@@ -84,31 +101,53 @@ class _AdminDashboardState extends State<AdminDashboard> {
         itemCount: orders.length,
         itemBuilder: (context, index) {
           final order = orders[index];
+          final user = order['users'] ?? {};
+          final createdAt = DateTime.parse(order['created_at']).toLocal();
 
           return Card(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            child: ListTile(
-              title: Text("Order ID: ${order["id"]}",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text("Current Status: ${order["status"]}"),
-              trailing: DropdownButton<String>(
-                value: order["status"],
-                items: [
-                  "Pending",
-                  "Confirmed",
-                  "Picked Up",
-                  "Washing",
-                  "Delivered",
-                  "Completed"
-                ]
-                    .map((status) => DropdownMenuItem(
-                    value: status, child: Text(status)))
-                    .toList(),
-                onChanged: (newStatus) {
-                  if (newStatus != null) {
-                    updateOrderStatus(order["id"], newStatus);
-                  }
-                },
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            elevation: 4,
+            child: InkWell(
+              onTap: () {
+                // Handle card click (e.g., show order details)
+                _showOrderDetails(context, order);
+              },
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Order ID: ${order["id"]}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    DropdownButton<String>(
+                      value: order["status"],
+                      items: [
+                        "Pending",
+                        "Confirmed",
+                        "Picked Up",
+                        "Washing",
+                        "Delivered",
+                        "Completed"
+                      ]
+                          .map((status) => DropdownMenuItem(
+                        value: status,
+                        child: Text(status),
+                      ))
+                          .toList(),
+                      onChanged: (newStatus) {
+                        if (newStatus != null) {
+                          updateOrderStatus(order["id"], newStatus);
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -116,5 +155,40 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ),
     );
   }
-}
 
+  void _showOrderDetails(BuildContext context, Map<String, dynamic> order) {
+    final user = order['users'] ?? {};
+    final createdAt = DateTime.parse(order['created_at']).toLocal();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Order Details"),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Order ID: ${order["id"]}"),
+                Text("Name: ${user['name'] ?? 'N/A'}"),
+                Text("Phone: ${user['phone'] ?? 'N/A'}"),
+                Text("Email: ${user['email'] ?? 'N/A'}"),
+                Text("Amount: ₦${order["amount"] ?? 'N/A'}"),
+                Text("Time: ${createdAt.toString().split('.')[0]}"),
+                Text("Status: ${order["status"]}"),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
